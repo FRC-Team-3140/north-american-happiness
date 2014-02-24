@@ -10,8 +10,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link href="{{ url_for('static', filename=\'css/navbar.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{ url_for('static', filename=\'css/data-entry.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/navbar.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/data-entry.css')}}" rel="stylesheet" type="text/css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -79,7 +79,11 @@
       <div class="col-lg-3 col-xs-12 data-container">
 	<div><p>Suspendisse potenti. Proin lorem mi, eleifend in tortor vitae, imperdiet sodales dui. Nunc nec orci id leo auctor semper eu ac felis. Aliquam eu placerat nunc, id aliquet ante</p></div>
 	<hr />
-	<div><input type="text" name="what-is-it"></input></div>
+	<!-- An example of using the forms in wtforms -->
+	{% from "_form_helpers.html" import render_field %}
+	<div><dl>
+	    {{ render_field(data.team_number)}}
+	</dl></div>
       </div>
       
     </div><!-- /.container -->
@@ -89,7 +93,7 @@
 	 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="{{ url_for('static', filename=\'bootstrap/js/bootstrap.min.js'"></script>
-    <script src="{{ url_for('static', filename=\'js/data-entry.js'"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/data-entry.js')}}"></script>
   </body>
 </html>
