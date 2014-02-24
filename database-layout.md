@@ -2,11 +2,11 @@
 
 One table, choices, will contain a mapping of (int id) to (varchar choice), which another table, teams, will reference. teams will have columns of (varchar teamnumber), (foreignkey[question] questionid), (foreignkey[choice] choice). Then there will be a table, questions, which has (int id) and (varchar question).
 
-# Database
+## Database
 
     CREATE DATABASE IF NOT EXISTS scout;
 
-# Table: choices
+## Table: choices
 
     CREATE TABLE IF NOT EXISTS scout.choices (
         id INTEGER NOT NULL AUTO_INCREMENT,
@@ -14,7 +14,7 @@ One table, choices, will contain a mapping of (int id) to (varchar choice), whic
         PRIMARY KEY (id)
     );
 
-# Table: questions
+## Table: questions
 
     CREATE TABLE IF NOT EXISTS scout.questions (
         id INTEGER NOT NULL AUTO_INCREMENT,
@@ -22,7 +22,7 @@ One table, choices, will contain a mapping of (int id) to (varchar choice), whic
         PRIMARY KEY (id)
     );
 
-# Table: teams
+## Table: teams
 
     CREATE TABLE IF NOT EXISTS scout.teams (
         id INTEGER NOT NULL AUTO_INCREMENT,
@@ -32,9 +32,9 @@ One table, choices, will contain a mapping of (int id) to (varchar choice), whic
         PRIMARY KEY (id)
     );
 
-# Using the tables
+## Using the tables
 
-    INSERT INTO scout.questions VALUES ("Programming language used"); -- id 1
+    INSERT INTO scout.questions VALUES (1, "Programming language used"); -- id 1
     INSERT INTO scout.choices VALUES (1, "LabVIEW"); -- id 1
     INSERT INTO scout.choices VALUES (2, "Java"); -- id 2
 
