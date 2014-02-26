@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
 from wtforms import Form, TextField, validators
 
-from sqlalchemy import Column, Integer, String, create_engine, desc
+from sqlalchemy import Column, Integer, String, create_engine, desc, Sequence, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.session import sessionmaker, Session
+from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 
@@ -36,23 +37,27 @@ class sesh(object):
         Session = sessionmaker()
         self.sess = Session.configure(bind=self.engine)
         self.sess = Session()
+        return self.sess
 
     def create_Engine(self):
         self.set_Connection()
         self.engine = create_engine(self.dbDriver + "://" + self.dbUsername + ":" + self.dbPassword + "@" + self.dbHostname + "/" + self.dbName)
+        return self.engine
 
 class Choice(Base):
     """
     CREATE TABLE IF NOT EXISTS scout.choices (
         id INTEGER NOT NULL AUTO_INCREMENT,
         choice VARCHAR(1024),
+        parent_question INTEGER REFERENCES scout.questions,
         PRIMARY KEY (id)
     );
     """
     __tablename__ = 'choices'
     
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    id = Column(Integer, primary_key=True)
     choice = Column(String(1024))
+    parent_question_id = Column(Integer, ForeignKey('questions.id'))
     
     def __repr__(self):
         return "<Choice(id='%d', choice='%s')>" % (
@@ -68,8 +73,9 @@ class Question(Base):
     """
     __tablename__ = 'questions'
     
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    id = Column(Integer, primary_key=True)
     question = Column(String(1024))
+    choices = relationship('Choice')
 
     def __repr__(self):
         return "<Question(id='%d', question='%s')>" % (
@@ -87,23 +93,23 @@ class Team(Base):
     """
     __tablename__ = 'teams'
     
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    teamnumber = Columns(String)
-    question_id = ForeignKey('questions.id')
-    choice_id = ForeignKey('choices.id')
+    id = Column(Integer, primary_key=True)
+    teamnumber = Column(String(8))
+    question_id = Column(ForeignKey(Question.id))
+    choice_id = Column(ForeignKey(Choice.id))
     
     question = relationship('Question', foreign_keys='Team.question_id')
     choice = relationship('Choice', foreign_keys='Team.choice_id')
     
     def __repr__(self):
         return "<Team(id='%d', teamnumber='%s', question='%s', choice='%s')>" % (
-            self.id, self.teamnumber, self.question, self.choice)
+            self.id, self.teamnumber, self.question.question, self.choice.choice)
 
 #creating a session
 dbsession = sesh()
-dbsession.create_Engine()
-dbsession.create_Session()
-teams = dbsession.sess.query(information).all()
+engine = dbsession.create_Engine()
+session = dbsession.create_Session()
+#teams = dbsession.sess.query(information).all()
 
 class information(Form):
     #barebones example of how to use wtf forms
