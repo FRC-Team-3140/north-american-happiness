@@ -58,16 +58,18 @@ class Choice(Base):
     id = Column(Integer, primary_key=True)
     choice = Column(String(1024))
     parent_question_id = Column(Integer, ForeignKey('questions.id'))
-    
+    parent_question = relationship("Question", backref="choices")
+
     def __repr__(self):
-        return "<Choice(id='%d', choice='%s')>" % (
-            self.id, self.choice)
+        return "<Choice(id='%d', choice='%s', parent_question_id=%r)>" % (
+            self.id, self.choice, self.parent_question_id)
 
 class Question(Base):
     """
     CREATE TABLE IF NOT EXISTS scout.questions (
         id INTEGER NOT NULL AUTO_INCREMENT,
         question VARCHAR(1024),
+        lock INTEGER,
         PRIMARY KEY (id)
     );
     """
@@ -75,11 +77,11 @@ class Question(Base):
     
     id = Column(Integer, primary_key=True)
     question = Column(String(1024))
-    choices = relationship('Choice')
+    lock = Column(Integer)
 
     def __repr__(self):
-        return "<Question(id='%d', question='%s')>" % (
-            self.id, self.question)
+        return "<Question(id='%d', question='%s', lock=%s)>" % (
+            self.id, self.question, "True" if self.lock == 1 else "False")
 
 class Team(Base):
     """
@@ -118,7 +120,17 @@ class information(Form):
 
 @app.route('/')
 def front_page():
-    data = information(request.form)
+    data = {
+        "questions": session.query(Question).all(),
+        
+        }
+    #data = information(request.form)
+    """ 
+    SELECT questions.question_id, 
+    FROM questions
+    INNER JOIN 
+    """
+    #data = "Sadness"
     #using validators with the forms
     #if data.validate():
     return render_template('index.html', title='Home', data=data)
