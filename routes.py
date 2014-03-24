@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from wtforms import Form, TextField, validators
 
 from sqlalchemy import Column, Integer, String, create_engine, desc, Sequence, ForeignKey
@@ -118,11 +118,30 @@ class information(Form):
     team_number = TextField('Team Number', [validators.Length(min=2,max=4)])
 
 
+@app.route('/update/<team_number>', methods=['GET', 'POST'])
+def update(team_number):
+    # data expected to be like:
+    # ( (1, "LabVIEW"), (3, "_2"), ... )
+    data = zip(map(int, request.args.getlist('qid')), request.args.getlist('a'))
+    for (qid, answer) in data:
+        if answer[0] == "_":
+            answer = int(answer[1:])
+        else:
+            choice = Choice(choice=answer, parent_question_id=qid)
+            session.add(choice)
+            session.commit()
+            answer = choice.id
+        team = Team(teamnumber=team_number, question_id=qid, choice_id=answer)
+        session.add(team)
+        session.commit()
+    return redirect(url_for('front_page', disp_success=team_number))
+    
+
 @app.route('/')
 def front_page():
     data = {
         "questions": session.query(Question).all(),
-        
+        "disp_success": request.args.get('disp_success', default=None),
         }
     #data = information(request.form)
     """ 

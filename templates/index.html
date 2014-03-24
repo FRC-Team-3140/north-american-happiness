@@ -43,6 +43,10 @@
       </div>
     </div>
 
+    {% if data.disp_success != None %}
+    <p>Successfully added answers for team #{{ data.disp_success }}</p>
+    {% endif %}
+
     <div class="container">
       {% for question in data.questions %}
       <div class="col-lg-3 col-xs-12 data-container">
@@ -50,38 +54,13 @@
 	<hr />
         <div class="btn-group-vertical data-input">
 	  {% for choice in question.choices %}
-          <button type="button" class="btn btn-default">{{ choice.choice }}</button>
+          <button id="button-{{ question.id }}-{{ choice.id }}" type="button" class="btn btn-default">{{ choice.choice }}</button>
 	  {% endfor %}
           <textarea rows="3"></textarea>
         </div>
       </div>
       {% endfor %}
 
-      <div class="col-lg-3 col-xs-12 data-container center-block">
-	<div><p>Suspendisse potenti. Proin lorem mi, eleifend in tortor vitae, imperdiet sodales dui. Nunc nec orci id leo auctor semper eu ac felis. Aliquam eu placerat nunc, id aliquet ante</p></div>
-	<hr />
-	<div><input type="text" name="what-is-it"></input></div>
-      </div>
-
-      <div class="col-lg-3 col-xs-12 data-container">
-	<div><p>Suspendisse potenti. Proin lorem mi, eleifend in tortor vitae, imperdiet sodales dui. Nunc nec orci id leo auctor semper eu ac felis. Aliquam eu placerat nunc, id aliquet ante</p></div>
-	<hr />
-	<div><input type="text" name="what-is-it"></input></div>
-      </div>
-      
-      <div class="col-lg-3 col-xs-12 data-container">
-	<div><p>Suspendisse potenti. Proin lorem mi, eleifend in tortor vitae, imperdiet sodales dui. Nunc nec orci id leo auctor semper eu ac felis. Aliquam eu placerat nunc, id aliquet ante</p></div>
-	<hr />
-	<div><input type="text" name="what-is-it"></input></div>
-      </div>
-
-    </div>
-    <div class="container">
-
-      <div class="col-lg-3 col-xs-12 data-container">
-	<div><p>Suspendisse potenti. Proin lorem mi, eleifend in tortor vitae, imperdiet sodales dui. Nunc nec orci id leo auctor semper eu ac felis. Aliquam eu placerat nunc, id aliquet ante</p></div>
-	<hr />
-      </div>
     </div><!-- /.container -->
 
 

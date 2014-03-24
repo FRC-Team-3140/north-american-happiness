@@ -8,3 +8,5 @@ $("textarea").on("keyup", function(e) {
         parent.find("button").show(1000);
     }
 });
+
+// $("[id^=button]").on("
